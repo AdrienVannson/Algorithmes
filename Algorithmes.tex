@@ -1,0 +1,196 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage[french]{babel}
+\usepackage{comment}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\newtheorem{theorem}{Théorème}[section] % Théorèmes
+\newtheorem{definition}{Définition}
+
+\usepackage{minted} % Codes
+\usemintedstyle{vs}
+
+\usepackage{geometry} % Mise en page
+\geometry{a4paper, margin=2.5cm}
+
+\usepackage{tikz} % Figures
+\tikzstyle{node} = [circle, draw, minimum size=18pt, thick]
+\tikzstyle{selected node} = [circle, fill=red!60]
+\tikzstyle{edge} = [draw, line width=2pt, -]
+\tikzstyle{selected edge} = [draw, line width=2pt, -, red!80]
+
+\title{Algorithmes classiques}
+\author{Adrien Vannson}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+
+\section{Graphes}
+Soit \(G=(V,E)\) un graphe. On posera \(N = Card(V)\) et \(M=Card(E)\).
+
+  \subsection{Plus courts chemins}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Floyd-Warshall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Floyd-Warshall}
+
+L'algorithme de Floyd-Warshall permet de calculer la longueur du plus court chemin entre chaque paire de noeuds d'un graphe \(G\) orienté et pondéré avec une complexité en \(\Theta(N^3)\). Les pondérations peuvent éventuellement être négatives, mais il ne doit pas exister de cycle négatif dans \(G\).
+
+\begin{minted}[linenos]{text}
+On initialise dist comme étant la matrice d'adjacence du graphe
+Pour chaque noeud p:
+  Pour chaque noeud d:
+    Pour chaque noeud f:
+      dist[d][f] = min(
+        dist[d][p] + dist[p][f],
+        dist[d][f]
+      )
+\end{minted}
+
+\begin{proof}
+La correction de l'algorithme est assurée par l'invariant de boucle suivant, vérifié au début de chaque itération de la boucle principale : pour toute paire de noeuds d'indices respectifs \(d\) et \(f\), \(dist[d][f]\) est la longueur du plus court chemin du noeud d'indice \(d\) vers le noeud d'indice \(f\) n'utilisant comme noeuds intermédiaires que des noeuds d'indice dans \( [\![0, p-1]\!] \).
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Représentation de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \subsection{Représentation de Tarjan}
+Soit \(G=(V,E)\) un graphe orienté. Lorsque l'on effectue un parcours en profondeur de \(G\), tous les arcs ne jouent pas le même rôle. La représentation de Tarjan permet de comprendre quels sont les différents types d'arcs pouvant être rencontrés lors du parcours.
+
+\begin{figure}[h]
+  \label{representation-tarjan}
+  \centering
+  \caption{Représentation de Tarjan}
+    \begin{tikzpicture}[scale=1.4]
+      \node[node] (0) at (1,3) {};
+      \node[node] (1) at (0,2) {};
+      \node[node] (2) at (2,2) {};
+      \node[node] (3) at (1,1) {};
+      \node[node] (4) at (3,1) {};
+      \node[node] (5) at (0,0) {};
+      \node[node] (6) at (1,0) {};
+      \node[node] (7) at (2,0) {};
+
+      \draw[edge, ->] (0) to (1);
+      \draw[edge, ->] (0) to (2);
+      \draw[edge, ->] (2) to (3);
+      \draw[edge, ->] (2) to (4);
+      \draw[edge, ->] (3) to (5);
+      \draw[edge, ->] (3) to (6);
+      \draw[edge, ->] (3) to (7);
+
+      \draw[edge, ->, red] (5) to [bend left] (2);
+      \draw[edge, ->, green] (0) to [bend left] (4);
+      \draw[edge, ->, blue] (4) to (3);
+      \draw[edge, ->, blue] (4) to (7);
+    \end{tikzpicture}
+\end{figure}
+
+Les arcs peuvent être classés en quatre catégories :
+\begin{itemize}
+  \item[\LARGE\textbf\textrightarrow] les \textit{arcs de découverte} pointent vers un noeud n'ayant pas encore été parcouru
+  \item[\color{red} \LARGE\textbf\textrightarrow] les \textit{arcs arrières} pointent vers un noeud en cours de parcours
+  \item[\color{green} \LARGE\textbf\textrightarrow] les \textit{arcs avants} pointent vers un noeud parcouru qui est un descendant du noeud actuel dans l'arbre d'appels
+  \item[\color{blue} \LARGE\textbf\textrightarrow] les \textit{arcs transverses} pointent vers un noeud parcouru qui n'est pas un descendant du noeud actuel dans l'arbre d'appels
+\end{itemize}
+
+
+  \subsection{Flots et couplages}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Théorème Flot-Max / Coupe-Min %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Théorème Flot-Max / Coupe-Min}
+
+\begin{figure}[h]
+  \centering
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \caption{Graphe \(G\), flot max}
+
+    \begin{tikzpicture}[scale=0.03]
+      \node[node][fill=green!80] (00) at (238.2, 119)     {P};
+      \node[node] (01) at (164.8, 103.4)   {};
+      \node[node] (02) at (182.1, 169.7)   {};
+      \node[node] (03) at (286.2, 167.5)   {};
+      \node[node] (04) at (211.1, 220)     {};
+      \node[node] (05) at (282.5, 238.1)   {};
+      \node[node] (06) at (133.5, 215.9)   {};
+      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {S};
+      \node[node] (08) at (235.7, 291.2)   {};
+
+      \draw[selected edge, <-] (00) -- (01);
+      \draw[edge]              (00) -- (02);
+      \draw[selected edge, <-] (00) -- (03);
+      \draw[selected edge, <-] (01) -- (02);
+      \draw[selected edge, <-] (02) -- (04);
+      \draw[edge]              (03) -- (04);
+      \draw[selected edge, <-] (03) -- (05);
+      \draw[edge]              (04) -- (06);
+      \draw[selected edge, <-] (04) -> (07);
+      \draw[edge]              (04) -- (08);
+      \draw[selected edge, <-] (05) -- (08);
+      \draw[edge]              (06) -- (07);
+      \draw[selected edge, ->] (07) -- (08);
+    \end{tikzpicture}
+  \end{minipage}%
+  \begin{minipage}{.5\textwidth}
+    \centering
+    \caption{Graphe résiduel \(G'\)}
+
+    \begin{tikzpicture}[scale=0.03]
+      \node[node][fill=green!80] (00) at (238.2, 119)     {P};
+      \node[node][fill=green!60] (01) at (164.8, 103.4)   {};
+      \node[node][fill=green!60] (02) at (182.1, 169.7)   {};
+      \node[node][fill=orange!60] (03) at (286.2, 167.5)   {};
+      \node[node][fill=orange!60] (04) at (211.1, 220)     {};
+      \node[node][fill=orange!60] (05) at (282.5, 238.1)   {};
+      \node[node][fill=orange!60] (06) at (133.5, 215.9)   {};
+      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {S};
+      \node[node][fill=orange!60] (08) at (235.7, 291.2)   {};
+
+      \draw[edge, ->] (00) -- (01) node [midway, fill=white] {2};;
+      \draw[edge]              (00) -- (02);
+      \draw[edge, ->] (00) -- (03) node [midway, fill=white] {2};;
+      \draw[edge, ->] (01) -- (02) node [midway, fill=white] {2};;
+      \draw[edge, ->] (02) -- (04) node [midway, fill=white] {2};;
+      \draw[edge]              (03) -- (04);
+      \draw[edge, ->] (03) -- (05) node [midway, fill=white] {2};;
+      \draw[edge]              (04) -- (06);
+      \draw[edge, ->] (04) -> (07) node [midway, fill=white] {2};;
+      \draw[edge]              (04) -- (08);
+      \draw[edge, ->] (05) -- (08) node [midway, fill=white] {2};;
+      \draw[edge]              (06) -- (07);
+      \draw[edge, <-] (07) -- (08) node [midway, fill=white] {2};;
+    \end{tikzpicture}
+  \end{minipage}
+\end{figure}
+
+\begin{theorem}
+Soit \(G=(V,E)\) un graphe orienté éventuellement pondéré, et \(S\) et \(P\) deux sommets de \(G\). La valeur maximale d'un flot de \(S\) vers \(P\) est égale à la valeur minimale d'une coupe entre \(S\) et \(P\).
+\end{theorem}
+\begin{proof}\leavevmode
+  \begin{itemize}
+    \item Le flot max doit être réparti parmi les arcs de toute coupe, donc \( \left| FlotMax \right| \leq \left| CoupeMin \right| \)
+    \item On note \(G'\) le graphe résiduel correspondant à un flot max de \(G\), \(A\) l'ensemble des noeuds accessibles depuis \(S\) dans \(G'\) et \(B\) l'ensemble des noeuds n'appartenant pas à \(A\). Il n'existe pas de chemin améliorant, donc \(P \in B\). On considère \(\mathcal{C}\) l'ensemble des arcs de \(G\) partant d'un noeud de \(A\) vers un noeud de \(B\).
+    \begin{itemize}
+        \item \(S \in A\), \(P \in B\) et il n'existe pas d'arc hors de \(\mathcal{C}\) d'un noeud de \(A\) vers un noeud de \(B\), donc \(\mathcal{C}\) est une coupe.
+        \item Dans le graphe résiduel \(G'\), il n'existe pas d'arc de \(A\) vers \(B\), donc les arcs de \(B\) vers \(A\) ne sont pas utilisés et ceux de \(A\) vers \(B\) sont saturés. Ainsi, la somme des capacités des arcs de \(A\) vers \(B\) est égale au flot max. Or, cette somme est égale à la somme des pondérations des arcs de \(\mathcal{C}\), donc \( \left| CoupeMin \right| \leq \left| FlotMax \right| \)
+    \end{itemize}
+  \end{itemize}
+  Finalement, \( \left| CoupeMin \right| = \left| FlotMax \right| \)
+\end{proof}
+
+\end{document}
