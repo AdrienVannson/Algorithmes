@@ -10,14 +10,35 @@
 \usepackage{enumitem}
 \usepackage{xcolor}
 
-\newtheorem{theorem}{Théorème}[section] % Théorèmes
-\newtheorem{definition}{Définition}
-
-\usepackage{minted} % Codes
-\usemintedstyle{vs}
-
 \usepackage{geometry} % Mise en page
 \geometry{a4paper, margin=2.5cm}
+
+\usepackage{minted} % Code
+\usemintedstyle{vs}
+
+\usepackage{listings} % Pseudo-code
+\usepackage{lmodern} % Mots clés en gras dans le code
+\lstdefinestyle{pseudocode}{
+    backgroundcolor=\color{white},
+    numberstyle=\tiny,
+    basicstyle=\ttfamily\small\color{blue},
+    keywordstyle=\bfseries,
+    morekeywords={Fonction, Pour, Si, Renvoyer},
+    breaklines=true,
+    keepspaces=true,
+    numbers=left,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4
+}
+\lstset{style=pseudocode}
+\lstset{ % Accents
+  literate=%
+    {é}{{\'e}}1
+    {è}{{\`e}}1
+    {à}{{\`a}}1
+}
 
 \usepackage{tikz} % Figures
 \tikzstyle{node} = [circle, draw, minimum size=18pt, thick]
@@ -25,14 +46,18 @@
 \tikzstyle{edge} = [draw, line width=2pt, -]
 \tikzstyle{selected edge} = [draw, line width=2pt, -, red!80]
 
-\title{Algorithmes et structures de données classiques}
+\newtheorem{theorem}{Théorème}[section] % Théorèmes
+\newtheorem{definition}{Définition}
+
+
+\title{Algorithmes et structures de données}
 \author{Adrien Vannson}
 \date{}
 
 \begin{document}
+
 \maketitle
 \tableofcontents
-
 \newpage
 
 \section{Graphes}
@@ -47,7 +72,7 @@ Soit \(G=(V,E)\) un graphe. On posera \(N = Card(V)\) et \(M=Card(E)\).
 
 L'algorithme de Floyd-Warshall permet de calculer la longueur du plus court chemin entre chaque paire de noeuds d'un graphe \(G\) orienté et pondéré avec une complexité en \(\Theta(N^3)\). Les pondérations peuvent éventuellement être négatives, mais il ne doit pas exister de cycle négatif dans \(G\).
 
-\begin{minted}[linenos]{text}
+\begin{lstlisting}
 On initialise dist comme étant la matrice d'adjacence du graphe
 Pour chaque noeud p:
   Pour chaque noeud d:
@@ -56,7 +81,7 @@ Pour chaque noeud p:
         dist[d][p] + dist[p][f],
         dist[d][f]
       )
-\end{minted}
+\end{lstlisting}
 
 \begin{proof}
 La correction de l'algorithme est assurée par l'invariant de boucle suivant, vérifié au début de chaque itération de la boucle principale : pour toute paire de noeuds d'indices respectifs \(d\) et \(f\), \(dist[d][f]\) est la longueur du plus court chemin du noeud d'indice \(d\) vers le noeud d'indice \(f\) n'utilisant comme noeuds intermédiaires que des noeuds d'indice dans \( [\![0, p-1]\!] \).
@@ -126,7 +151,7 @@ On effectue un DFS sur le graphe, en maintenant à jour :
       \item Visité : le parcours du noeud est terminé, et sa composante fortement connexe est complètement connue
     \end{itemize}
 \end{itemize}
-La fonction effectuant le parcours renvoie le plus petit identifiant d'un noeud présent dans la pile et accessible directement depuis le sous-arbre enraciné sur le noeud d'appel, ou éventuellement \(+\infty\) si aucun noeud ne convient.
+La fonction \lstinline|parcourir| renvoie le plus petit identifiant d'un noeud présent dans la pile et accessible directement depuis le sous-arbre enraciné sur le noeud d'appel, ou éventuellement \(+\infty\) si aucun noeud ne convient.
 
 \begin{figure}[h]
   \label{algorithme-tarjan}
@@ -158,9 +183,7 @@ La fonction effectuant le parcours renvoie le plus petit identifiant d'un noeud 
     \end{tikzpicture}
 \end{figure}
 
-{
-  \color{blue}
-  \begin{Verbatim}[numbers=left]
+\begin{lstlisting}
 Fonction parcourir (noeud):
     Donner un identifiant au noeud actuel
     Ajouter le noeud à la pile et mettre à jour son état
@@ -174,17 +197,17 @@ Fonction parcourir (noeud):
             idMinAccessible = min(parcourir(voisin), idMinAccessible)
 
     Si idMinAccessible == idNoeud:
-        La composante fortement connexe du noeud est composée des noeuds de la
-          pile à partir du noeud actuel
+        La composante fortement connexe du noeud est composée des noeuds
+          de la pile à partir du noeud actuel
         Enlever ces noeuds de la pile, et les marquer comme visités
         Renvoyer +oo
 
     Renvoyer idMinAccessible
 
 Pour chaque noeud du graphe:
-    Si le noeud est inconnu, appeler la fonction parcourir sur ce noeud
-  \end{Verbatim}
-}
+    Si le noeud est inconnu:
+        Appeler la fonction parcourir sur ce noeud
+\end{lstlisting}
 
 Montrons que la fonction parcourir a le comportement attendu. On suppose que, lors d'un appel à la fonction parcourir, la boucle sur tous les voisins vient de se terminer.
 \begin{itemize}
