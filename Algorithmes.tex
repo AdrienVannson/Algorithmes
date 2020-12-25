@@ -25,7 +25,7 @@
 \tikzstyle{edge} = [draw, line width=2pt, -]
 \tikzstyle{selected edge} = [draw, line width=2pt, -, red!80]
 
-\title{Algorithmes classiques}
+\title{Algorithmes et structures de données classiques}
 \author{Adrien Vannson}
 \date{}
 
@@ -104,6 +104,95 @@ Les arcs peuvent être classés en quatre catégories :
   \item[\color{red} \LARGE\textbf\textrightarrow] les \textit{arcs arrières} pointent vers un noeud en cours de parcours
   \item[\color{green} \LARGE\textbf\textrightarrow] les \textit{arcs avants} pointent vers un noeud parcouru qui est un descendant du noeud actuel dans l'arbre d'appels
   \item[\color{blue} \LARGE\textbf\textrightarrow] les \textit{arcs transverses} pointent vers un noeud parcouru qui n'est pas un descendant du noeud actuel dans l'arbre d'appels
+\end{itemize}
+
+
+  \subsection{Composantes fortement connexes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Algorithme de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Algorithme de Tarjan}
+L'algorithme de Tarjan permet de calculer les composantes fortement connexes d'un graphe orienté \(G=(V,E)\). Il effectue un parcours en profondeur du graphe, on utilisera donc la représentation graphique décrite précédemment qui est adaptée à cette situation. \\
+On définit tout d'abord la racine d'une composante fortement connexe comme étant le premier noeud de la composante rencontré lors du parcours du graphe. Elles sont représentés en jaune sur le schéma. On remarque qu'une composante fortement connexe est un sous-arbre de l'arbre des appels du DFS enraciné sur la racine de la composante, privé des éventuels sous-arbres correspondant à d'autres composantes. Pour trouver les composantes fortement connexes, il suffit donc de trouver l'ensemble de leurs racines. \\
+On effectue un DFS sur le graphe, en maintenant à jour :
+\begin{itemize}
+  \item Des identifiants pour chacun des noeuds : ils sont données par ordre croissant au fur et à mesure du parcours
+  \item Une pile contenant les noeuds dont la composante n'a pas encore été parcourue complètement, ajoutés dans leur ordre de parcours
+  \item L'état de chaque noeud, parmi les états suivants :
+    \begin{itemize}
+      \item À visiter : le noeud est encore inconnu
+      \item Dans la pile : le noeud a été découvert, mais sa composante fortement connexe n'est pas encore complètement connue
+      \item Visité : le parcours du noeud est terminé, et sa composante fortement connexe est complètement connue
+    \end{itemize}
+\end{itemize}
+La fonction effectuant le parcours renvoie le plus petit identifiant d'un noeud présent dans la pile et accessible directement depuis le sous-arbre enraciné sur le noeud d'appel, ou éventuellement \(+\infty\) si aucun noeud ne convient.
+
+\begin{figure}[h]
+  \label{algorithme-tarjan}
+  \centering
+  \caption{Exemple}
+    \begin{tikzpicture}[scale=1.6]
+      \node[node, fill=yellow] (01) at (1,4) {1};
+      \node[node, fill=yellow] (02) at (0,3) {2};
+      \node[node] (03) at (0,2) {3};
+      \node[node, fill=yellow] (04) at (1,3) {4};
+      \node[node] (05) at (1,2) {5};
+      \node[node] (06) at (1,1) {6};
+      \node[node] (07) at (1,0) {7};
+      \node[node] (08) at (2,2) {8};
+      \node[node] (09) at (2,1) {9};
+      \node[node] (10) at (2,3) {10};
+      \node[node] (11) at (3,2) {11};
+
+      \foreach \u / \v in {01/02, 01/04, 01/10, 02/03, 04/05, 05/06, 06/07, 04/08, 08/09, 10/11}
+          \draw[edge, ->] (\u) to (\v);
+
+      \draw[edge, ->, red] (03) to [bend left] (02);
+      \draw[edge, ->, red] (07) to [bend left] (05);
+      \draw[edge, ->, red] (06) to [bend right] (04);
+      \draw[edge, ->, red] (11) to [bend left] (01);
+      \draw[edge, ->, green] (01) to [bend right] (05);
+      \draw[edge, ->, blue] (05) to (03);
+      \draw[edge, ->, blue] (09) to (07);
+    \end{tikzpicture}
+\end{figure}
+
+{
+  \color{blue}
+  \begin{Verbatim}[numbers=left]
+Fonction parcourir (noeud):
+    Donner un identifiant au noeud actuel
+    Ajouter le noeud à la pile et mettre à jour son état
+
+    idMinAccessible = idNoeud
+
+    Pour chaque voisin:
+        Si le voisin est dans la pile:
+            idMinAccessible = min(idVoisin, idMinAccessible)
+        Si le voisin n'a pas encore été visité:
+            idMinAccessible = min(parcourir(voisin), idMinAccessible)
+
+    Si idMinAccessible == idNoeud:
+        La composante fortement connexe du noeud est composée des noeuds de la
+          pile à partir du noeud actuel
+        Enlever ces noeuds de la pile, et les marquer comme visités
+        Renvoyer +oo
+
+    Renvoyer idMinAccessible
+
+Pour chaque noeud du graphe:
+    Si le noeud est inconnu, appeler la fonction parcourir sur ce noeud
+  \end{Verbatim}
+}
+
+Montrons que la fonction parcourir a le comportement attendu. On suppose que, lors d'un appel à la fonction parcourir, la boucle sur tous les voisins vient de se terminer.
+\begin{itemize}
+  \item Si idMinAccessible vaut l'identifiant du noeud, alors il est impossible de sortir du sous-arbre depuis celui-ci, sauf éventuellement vers une composante fortement connexe déjà complète. Le noeud est donc une racine, et la composante fortement connexe correspondante est composée de l'ensemble des noeuds au dessus du noeud actuel dans la pile. On ajoute la composante à celles déjà détectées, et on continue l'exploration.
+  \item On suppose à présent que idMinAccessible est strictement inférieur à l'identifiant du noeud. Le noeud correspondant appartient à une composante fortement connexe dont la racine est toujours en cours de visite (sinon, la composante aurait été trouvée). C'est donc un noeud ascendant du noeud actuel, et il est accessible depuis celui-ci. Ainsi, le noeud actuel n'est pas une racine. On renvoie la valeur demandée et on continue le parcours.
+
+
+
 \end{itemize}
 
 
