@@ -89,15 +89,16 @@ La correction de l'algorithme est assurée par l'invariant de boucle suivant, v�
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Représentation de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Arbre du DFS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \subsection{Représentation de Tarjan}
-Soit \(G=(V,E)\) un graphe orienté. Lorsque l'on effectue un parcours en profondeur de \(G\), tous les arcs ne jouent pas le même rôle. La représentation de Tarjan permet de comprendre quels sont les différents types d'arcs pouvant être rencontrés lors du parcours.
+  \subsection{Arbre du DFS}
+Il est possible de représenter un graphe orienté en mettant en avant les différentes propriétés de ses arcs pouvant être rencontrées lors d'un parcours en profondeur, ce qui peut par exemple aider à adapter l'algorithme du DFS à différents problèmes.
+Pour cela, on effectue un parcours en profondeur du graphe, puis on le représente selon l'arbre des appels de la fonction récursive.
 
 \begin{figure}[h]
-  \label{representation-tarjan}
+  \label{arbre-dfs}
   \centering
-  \caption{Représentation de Tarjan}
+  \caption{Arbre du DFS}
     \begin{tikzpicture}[scale=1.4]
       \node[node] (0) at (1,3) {};
       \node[node] (1) at (0,2) {};
