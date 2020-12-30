@@ -214,20 +214,50 @@ Montrons que la fonction parcourir a le comportement attendu. On suppose que, lo
 \begin{itemize}
   \item Si idMinAccessible vaut l'identifiant du noeud, alors il est impossible de sortir du sous-arbre depuis celui-ci, sauf éventuellement vers une composante fortement connexe déjà complète. Le noeud est donc une racine, et la composante fortement connexe correspondante est composée de l'ensemble des noeuds au dessus du noeud actuel dans la pile. On ajoute la composante à celles déjà détectées, et on continue l'exploration.
   \item On suppose à présent que idMinAccessible est strictement inférieur à l'identifiant du noeud. Le noeud correspondant appartient à une composante fortement connexe dont la racine est toujours en cours de visite (sinon, la composante aurait été trouvée). C'est donc un noeud ascendant du noeud actuel, et il est accessible depuis celui-ci. Ainsi, le noeud actuel n'est pas une racine. On renvoie la valeur demandée et on continue le parcours.
-
-
-
 \end{itemize}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Flots et couplages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Flots et couplages}
+    \subsubsection{Définitions}
+
+Soit \(G=(V,E)\) un graphe orienté et \((s,p)\) deux sommets distincts de \(V\) que l'on appellera respectivement \textit{source} et \textit{puits}. On associe à chaque arc \(e \in E\) un réel positif représentant sa capacité. Pour tout \((u,v) \in V^2\), on notera \(c(u,v)\) la somme des capacités des arcs de \(u\) vers \(v\).
+
+\begin{definition}
+  \(F = (G,c,s,p)\) constitue un réseau de flot.
+\end{definition}
+
+\begin{definition}
+  Un flot \(f\) est une application de \(V^2\) dans \(\mathbb{R}\) telle que :
+  \begin{itemize}
+    \item Pour tout \((u,v) \in V^2\), \(f(u,v) \leq c(u,v)\)
+    \item Pour tout \((u,v) \in V^2\), \(f(u,v) = -f(v,u)\)
+    \item Pour tout \(u \in V \setminus \{s,p\}\), \(\sum\limits_{v \in V} f(u,v) = 0\)
+    \item \(\sum\limits_{v \in V} f(s,v) \geq 0\) et \(\sum\limits_{v \in V} f(p,v) \leq 0\)
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  La valeur d'un flot \(f\) est \(|f| = \sum\limits_{v \in V} f(s,v)\).
+\end{definition}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Capacités résiduelles %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Capacités résiduelles}
+
+Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacité résiduelle de \(u\) vers \(v\). Cela correspond à la capacité disponible de \(u\) vers \(v\) après l'application du flot \(f\). Le réseau résiduel correspondant à \((F,f)\) est obtenu en remplaçant dans \(F\) les capacités des arcs par leurs capacités résiduelles.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Théorème Flot-Max / Coupe-Min %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Théorème Flot-Max / Coupe-Min}
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \begin{minipage}{.5\textwidth}
     \centering
