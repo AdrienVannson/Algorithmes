@@ -49,6 +49,14 @@
 \newtheorem{theorem}{Théorème}[section] % Théorèmes
 \newtheorem{definition}{Définition}
 
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  filecolor=magenta,
+  urlcolor=magenta
+}
+
 
 \title{Algorithmes et structures de données}
 \author{Adrien Vannson}
@@ -184,6 +192,7 @@ La fonction \lstinline|parcourir| renvoie le plus petit identifiant d'un noeud p
     \end{tikzpicture}
 \end{figure}
 
+\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/tarjan.hpp}{Implémentation}
 \begin{lstlisting}
 Fonction parcourir (noeud):
     Donner un identifiant au noeud actuel
@@ -260,7 +269,8 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
 %%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme d'Edmonds-Karp}
-L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale.
+L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale. \href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/edmonds-karp.hpp}{Implémentation}
+
 \begin{lstlisting}
 Initialiser f comme étant un flot nul
 Créer le réseau résiduel correspondant à f
@@ -268,6 +278,7 @@ Tant qu'il existe un chemin augmentant dans le réseau résiduel :
     Utiliser ce chemin pour améliorer le flot
     Mettre à jour le graphe résiduel
 \end{lstlisting}
+
 La recherche d'un chemin augmentant est effectuée à l'aide d'un BFS dans le graphe résiduel.
 
 \begin{proof} \leavevmode
