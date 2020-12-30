@@ -23,7 +23,7 @@
     numberstyle=\tiny,
     basicstyle=\ttfamily\small\color{blue},
     keywordstyle=\bfseries,
-    morekeywords={Fonction, Pour, Si, Renvoyer},
+    morekeywords={Fonction, Pour, Si, Renvoyer, Tant},
     breaklines=true,
     keepspaces=true,
     numbers=left,
@@ -251,6 +251,33 @@ Soit \(G=(V,E)\) un graphe orienté et \((s,p)\) deux sommets distincts de \(V\)
 
 Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacité résiduelle de \(u\) vers \(v\). Cela correspond à la capacité disponible de \(u\) vers \(v\) après l'application du flot \(f\). Le réseau résiduel correspondant à \((F,f)\) est obtenu en remplaçant dans \(F\) les capacités des arcs par leurs capacités résiduelles.
 
+\begin{definition}
+  Un chemin augmentant est un chemin de \(s\) vers \(p\) sur lequel toutes les capacités résiduelles sont strictement positives.
+\end{definition}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Algorithme d'Edmonds-Karp}
+L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale.
+\begin{lstlisting}
+Initialiser f comme étant un flot nul
+Créer le réseau résiduel correspondant à f
+Tant qu'il existe un chemin augmentant dans le réseau résiduel :
+    Utiliser ce chemin pour améliorer le flot
+    Mettre à jour le graphe résiduel
+\end{lstlisting}
+La recherche d'un chemin augmentant est effectuée à l'aide d'un BFS dans le graphe résiduel.
+
+\begin{proof} \leavevmode
+  \begin{itemize}
+    \item Terminaison : \(|f|\) croit strictement à chaque itération de la boucle principale, et la valeur d'un flot est majorée par la somme de la capacité des arcs. Ainsi, \textbf{lorsque les capacités sont des entiers}, l'algorithme termine.
+    \item Correction : Lorsque l'algorithme termine, il n'existe plus de chemin augmentant, le flot obtenu est donc de valeur maximale.
+    % \item Complexité : la recherche d'un chemin augmentant est effectuée à l'aide d'un BFS, sa complexité temporelle est donc en \(O(|E|)\).
+  \end{itemize}
+\end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Théorème Flot-Max / Coupe-Min %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -264,14 +291,14 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
     \caption{Graphe \(G\), flot max}
 
     \begin{tikzpicture}[scale=0.03]
-      \node[node][fill=green!80] (00) at (238.2, 119)     {P};
+      \node[node][fill=green!80] (00) at (238.2, 119)     {p};
       \node[node] (01) at (164.8, 103.4)   {};
       \node[node] (02) at (182.1, 169.7)   {};
       \node[node] (03) at (286.2, 167.5)   {};
       \node[node] (04) at (211.1, 220)     {};
       \node[node] (05) at (282.5, 238.1)   {};
       \node[node] (06) at (133.5, 215.9)   {};
-      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {S};
+      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {s};
       \node[node] (08) at (235.7, 291.2)   {};
 
       \draw[selected edge, <-] (00) -- (01);
@@ -294,14 +321,14 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
     \caption{Graphe résiduel \(G'\)}
 
     \begin{tikzpicture}[scale=0.03]
-      \node[node][fill=green!80] (00) at (238.2, 119)     {P};
+      \node[node][fill=green!80] (00) at (238.2, 119)     {p};
       \node[node][fill=green!60] (01) at (164.8, 103.4)   {};
       \node[node][fill=green!60] (02) at (182.1, 169.7)   {};
       \node[node][fill=orange!60] (03) at (286.2, 167.5)   {};
       \node[node][fill=orange!60] (04) at (211.1, 220)     {};
       \node[node][fill=orange!60] (05) at (282.5, 238.1)   {};
       \node[node][fill=orange!60] (06) at (133.5, 215.9)   {};
-      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {S};
+      \node[node][fill=orange!80] (07) at (165.5, 279.4)   {s};
       \node[node][fill=orange!60] (08) at (235.7, 291.2)   {};
 
       \draw[edge, ->] (00) -- (01) node [midway, fill=white] {2};;
@@ -322,14 +349,14 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
 \end{figure}
 
 \begin{theorem}
-Soit \(G=(V,E)\) un graphe orienté éventuellement pondéré, et \(S\) et \(P\) deux sommets de \(G\). La valeur maximale d'un flot de \(S\) vers \(P\) est égale à la valeur minimale d'une coupe entre \(S\) et \(P\).
+Soit \(G=(V,E)\) un graphe orienté pondéré, et \(s\) et \(p\) deux sommets de \(G\). La valeur maximale d'un flot de \(s\) vers \(p\) est égale à la valeur minimale d'une coupe entre \(s\) et \(p\).
 \end{theorem}
 \begin{proof}\leavevmode
   \begin{itemize}
     \item Le flot max doit être réparti parmi les arcs de toute coupe, donc \( \left| FlotMax \right| \leq \left| CoupeMin \right| \)
-    \item On note \(G'\) le graphe résiduel correspondant à un flot max de \(G\), \(A\) l'ensemble des noeuds accessibles depuis \(S\) dans \(G'\) et \(B\) l'ensemble des noeuds n'appartenant pas à \(A\). Il n'existe pas de chemin améliorant, donc \(P \in B\). On considère \(\mathcal{C}\) l'ensemble des arcs de \(G\) partant d'un noeud de \(A\) vers un noeud de \(B\).
+    \item On note \(G'\) le graphe résiduel correspondant à un flot max de \(G\), \(A\) l'ensemble des noeuds accessibles depuis \(S\) dans \(G'\) et \(B\) l'ensemble des noeuds n'appartenant pas à \(A\). Il n'existe pas de chemin améliorant, donc \(p \in B\). On considère \(\mathcal{C}\) l'ensemble des arcs de \(G\) partant d'un noeud de \(A\) vers un noeud de \(B\).
     \begin{itemize}
-        \item \(S \in A\), \(P \in B\) et il n'existe pas d'arc hors de \(\mathcal{C}\) d'un noeud de \(A\) vers un noeud de \(B\), donc \(\mathcal{C}\) est une coupe.
+        \item \(s \in A\), \(p \in B\) et il n'existe pas d'arc hors de \(\mathcal{C}\) d'un noeud de \(A\) vers un noeud de \(B\), donc \(\mathcal{C}\) est une coupe.
         \item Dans le graphe résiduel \(G'\), il n'existe pas d'arc de \(A\) vers \(B\), donc les arcs de \(B\) vers \(A\) ne sont pas utilisés et ceux de \(A\) vers \(B\) sont saturés. Ainsi, la somme des capacités des arcs de \(A\) vers \(B\) est égale au flot max. Or, cette somme est égale à la somme des pondérations des arcs de \(\mathcal{C}\), donc \( \left| CoupeMin \right| \leq \left| FlotMax \right| \)
     \end{itemize}
   \end{itemize}
