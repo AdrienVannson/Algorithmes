@@ -155,6 +155,7 @@ Les arcs peuvent être classés en quatre catégories :
     \subsubsection{Algorithme de Kosaraju}
 L'algorithme de Kosaraju permet de calculer les composantes fortement connexes d'un graphe orienté. Pour cela, il effectue successivement deux DFS. Le premier permet de trouver un parcours suffixe du graphe, c'est-à-dire un parcours suffixe de l'arbre des appels du DFS. Le deuxième est effectué sur le graphe transposé \(G^\top\) (graphe obtenu en inversant les arcs de \(G\)), en découvrant les noeuds dans l'ordre inverse du parcours suffixe. Il permet de déterminer les composantes fortement connexes du graphe.
 
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/kosaraju.hpp}{Implémentation}
 \begin{lstlisting}
 Trouver un parcours suffixe du graphe
 Pour chaque noeud v dans l'ordre inverse du parcours suffixe :
@@ -226,7 +227,7 @@ La fonction \lstinline|parcourir| renvoie le plus petit identifiant d'un noeud p
     \end{tikzpicture}
 \end{figure}
 
-\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/tarjan.hpp}{Implémentation}
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/tarjan.hpp}{Implémentation}
 \begin{lstlisting}
 Fonction parcourir (noeud):
     Donner un identifiant au noeud actuel
@@ -303,8 +304,9 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
 %%%%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme d'Edmonds-Karp}
-L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Sa complexité est également en \(O(S)\) où \(S\) est la somme des capacités des arcs du graphe. Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale. \href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/edmonds-karp.hpp}{Implémentation}
+L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Sa complexité est également en \(O(S)\) où \(S\) est la somme des capacités des arcs du graphe. Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale.
 
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/edmonds-karp.hpp}{Implémentation}
 \begin{lstlisting}
 Initialiser f comme étant un flot nul
 Créer le réseau résiduel correspondant à f
