@@ -150,6 +150,34 @@ Les arcs peuvent être classés en quatre catégories :
   \subsection{Composantes fortement connexes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Algorithme de Kosaraju  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Algorithme de Kosaraju}
+L'algorithme de Kosaraju permet de calculer les composantes fortement connexes d'un graphe orienté. Pour cela, il effectue successivement deux DFS. Le premier permet de trouver un parcours suffixe du graphe, c'est-à-dire un parcours suffixe de l'arbre des appels du DFS. Le deuxième est effectué sur le graphe transposé \(G^\top\) (graphe obtenu en inversant les arcs de \(G\)), en découvrant les noeuds dans l'ordre inverse du parcours suffixe. Il permet de déterminer les composantes fortement connexes du graphe.
+
+\begin{lstlisting}
+Trouver un parcours suffixe du graphe
+Pour chaque noeud v dans l'ordre inverse du parcours suffixe :
+    Si v n'a pas encore été visité :
+        Trouver l'ensemble des noeuds non-visités ayant accès à v
+        Cet ensemble est la composante fortement connexe contenant v
+        Marquer tous ses noeuds comme visités
+\end{lstlisting}
+
+\begin{proof}
+  Montrons que l'ordre de parcours obtenu avec le premier DFS permet effectivement de trouver les composantes fortement connexes lors du deuxième DFS. Soit \(v\) un noeud sur lequel débute un parcours du deuxième DFS.
+  \begin{itemize}
+    \item Soit \(u\) un noeud de la composante fortement connexe à laquelle \(v\) appartient. Il existe un chemin de \(v\) vers \(u\) dans \(G^\top\). De plus, \(v\) est le premier noeud de sa composante fortement connexe à être rencontré, donc aucun des noeuds permettant de se rendre de \(v\) vers \(u\) n'a été initialement visité. Ainsi, \(u\) sera détecté lors du parcours.
+    \item Soit \(u\) un noeud parcouru lors de l'appel du deuxième DFS depuis le noeud \(v\). Montrons que \(u\) appartient à la composante fortement connexe contenant \(v\).
+      \begin{itemize}
+        \item Il existe un chemin de \(v\) vers \(u\) dans \(G^\top\), donc il existe un chemin de \(u\) vers \(v\) dans \(G\).
+        \item On suppose qu'il n'existe pas de chemin de \(v\) vers \(u\) dans \(G\). Le point précédent assure que \(v\) apparaît avant \(u\) dans le parcours suffixe de \(G\), donc que \(u\) a déjà été parcouru lorsque le parcours de \(v\) commence. Cela est absurde car \(u\) devrait être parcouru à nouveau lors de l'exploration depuis \(v\).
+      \end{itemize}
+  \end{itemize}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Algorithme de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Tarjan}
