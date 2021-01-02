@@ -233,9 +233,9 @@ Montrons que la fonction parcourir a le comportement attendu. On suppose que, lo
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Flots et couplages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Flots %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \subsection{Flots et couplages}
+  \subsection{Flots}
     \subsubsection{Définitions}
 
 Soit \(G=(V,E)\) un graphe orienté et \((s,p)\) deux sommets distincts de \(V\) que l'on appellera respectivement \textit{source} et \textit{puits}. On associe à chaque arc \(e \in E\) un réel positif représentant sa capacité. Pour tout \((u,v) \in V^2\), on notera \(c(u,v)\) la somme des capacités des arcs de \(u\) vers \(v\).
@@ -275,7 +275,7 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
 %%%%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme d'Edmonds-Karp}
-L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale. \href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/edmonds-karp.hpp}{Implémentation}
+L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Sa complexité est également en \(O(S)\) où \(S\) est la somme des capacités des arcs du graphe. Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale. \href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/edmonds-karp.hpp}{Implémentation}
 
 \begin{lstlisting}
 Initialiser f comme étant un flot nul
@@ -289,7 +289,7 @@ La recherche d'un chemin augmentant est effectuée à l'aide d'un BFS dans le gr
 
 \begin{proof} \leavevmode
   \begin{itemize}
-    \item Terminaison : \(|f|\) croit strictement à chaque itération de la boucle principale, et la valeur d'un flot est majorée par la somme de la capacité des arcs. Ainsi, \textbf{lorsque les capacités sont des entiers}, l'algorithme termine.
+    \item Terminaison : \(|f|\) croit strictement à chaque itération de la boucle principale, et la valeur d'un flot est majorée par la somme de la capacité des arcs. Ainsi, \textbf{lorsque les capacités sont des entiers}, l'algorithme termine. Cet argument prouve également la complexité en \(O(S)\).
     \item Correction : Lorsque l'algorithme termine, il n'existe plus de chemin augmentant, le flot obtenu est donc de valeur maximale.
     % \item Complexité : la recherche d'un chemin augmentant est effectuée à l'aide d'un BFS, sa complexité temporelle est donc en \(O(|E|)\).
   \end{itemize}
