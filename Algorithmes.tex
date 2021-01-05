@@ -37,6 +37,7 @@
   literate=%
     {é}{{\'e}}1
     {è}{{\`e}}1
+    {ê}{{\^e}}1
     {à}{{\`a}}1
 }
 
@@ -409,5 +410,31 @@ Soit \(G=(V,E)\) un graphe orienté pondéré, et \(s\) et \(p\) deux sommets de
   \end{itemize}
   Finalement, \( \left| CoupeMin \right| = \left| FlotMax \right| \)
 \end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Géométrie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section{Géométrie}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Enveloppe convexe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Enveloppe convexe}
+
+On considère un ensemble \(A\) de \(n\) points du plan de coordonnées \((x_i,y_i)\) dont on cherche à calculer l'enveloppe convexe. Pour cela, il suffit de calculer d'abord la partie supérieure de l'enveloppe, puis sa partie inférieure. Le calcul de la partie inférieure pourra s'effectuer de manière similaire à celui de la partie supérieure, on ne décrira donc que le calcul de la partie supérieure. On effectue un balayage des points de \(A\) par abscisses décroissantes, en maintenant sur une pile l'ensemble des points de \(A\) parcourus et appartenant à la frontière de l'enveloppe convexe actuelle. À chaque tour de boucle, on enlève de la pile les points n'appartenant plus à l'enveloppe convexe, puis on ajoute le point actuel.
+
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/geometry/convex-hull.hpp}{Implémentation}
+\begin{lstlisting}
+Créer une pile de points vide
+Pour chaque point de A par abscisses décroissantes :
+    Tant que le point en haut de la pile peut être supprimé :
+        Le supprimer
+    Ajouter le point actuel à la pile
+\end{lstlisting}
+
+L'algorithme décrit a une complexité temporelle en \(O(n \log(n) )\) car il nécessite un tri des points.
+
+
 
 \end{document}
