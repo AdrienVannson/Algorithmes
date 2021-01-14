@@ -257,7 +257,7 @@ Pour chaque noeud du graphe:
 
 Montrons que la fonction parcourir a le comportement attendu. On suppose que, lors d'un appel à la fonction parcourir, la boucle sur tous les voisins vient de se terminer.
 \begin{itemize}
-  \item Si idMinAccessible vaut l'identifiant du noeud, alors il est impossible de sortir du sous-arbre depuis celui-ci, sauf éventuellement vers une composante fortement connexe déjà complète. Le noeud est donc une racine, et la composante fortement connexe correspondante est composée de l'ensemble des noeuds au dessus du noeud actuel dans la pile. On ajoute la composante à celles déjà détectées, et on continue l'exploration.
+  \item Si idMinAccessible vaut l'identifiant du noeud, alors il est impossible de sortir du sous-arbre depuis celui-ci, sauf éventuellement vers une composante fortement connexe déjà complète. Le noeud est donc une racine, et la composante fortement connexe correspondante est composée de l'ensemble des noeuds au-dessus du noeud actuel dans la pile. On ajoute la composante à celles déjà détectées, et on continue l'exploration.
   \item On suppose à présent que idMinAccessible est strictement inférieur à l'identifiant du noeud. Le noeud correspondant appartient à une composante fortement connexe dont la racine est toujours en cours de visite (sinon, la composante aurait été trouvée). C'est donc un noeud ascendant du noeud actuel, et il est accessible depuis celui-ci. Ainsi, le noeud actuel n'est pas une racine. On renvoie la valeur demandée et on continue le parcours.
 \end{itemize}
 
@@ -320,7 +320,7 @@ La recherche d'un chemin augmentant est effectuée à l'aide d'un BFS dans le gr
 
 \begin{proof} \leavevmode
   \begin{itemize}
-    \item Terminaison : \(|f|\) croit strictement à chaque itération de la boucle principale, et la valeur d'un flot est majorée par la somme de la capacité des arcs. Ainsi, \textbf{lorsque les capacités sont des entiers}, l'algorithme termine. Cet argument prouve également la complexité en \(O(S)\).
+    \item Terminaison : \(|f|\) croît strictement à chaque itération de la boucle principale, et la valeur d'un flot est majorée par la somme de la capacité des arcs. Ainsi, \textbf{lorsque les capacités sont des entiers}, l'algorithme termine. Cet argument prouve également la complexité en \(O(S)\).
     \item Correction : Lorsque l'algorithme termine, il n'existe plus de chemin augmentant, le flot obtenu est donc de valeur maximale.
     % \item Complexité : la recherche d'un chemin augmentant est effectuée à l'aide d'un BFS, sa complexité temporelle est donc en \(O(|E|)\).
   \end{itemize}
