@@ -485,6 +485,26 @@ Soit \(G=(V,E)\) un graphe biparti dont on note \((X,Y)\) une partition des somm
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Recherche d'un couplage maximum %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      \subsubsection{Recherche d'un couplage maximum}
+Soit \(G=(V,E)\) un graphe biparti. Pour construire un couplage maximum de \(G\), on peut améliorer tant que possible un couplage initialement vide en trouvant et utilisant des chemins d'augmentation.
+
+\begin{lstlisting}
+Créer un couplage vide C
+Tant qu'il existe un chemin d'augmentation :
+    L'utiliser pour augmenter de un la taille de C
+\end{lstlisting}
+
+\begin{proof}\leavevmode
+  \begin{itemize}
+    \item L'entier \(|C|\) est incrémenté à chaque itération de la boucle principale. Or, \(|C| \leq |E|\), donc l'algorithme termine.
+    \item À la fin de l'exécution de l'algorithme, il n'existe plus de chemin d'augmentation pour \((G,C)\) : le théorème précédent assure donc que \(C\) est maximum. Ainsi, l'algorithme renvoie un couplage maximum.
+  \end{itemize}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Géométrie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \section{Géométrie}
