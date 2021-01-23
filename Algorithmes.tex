@@ -292,6 +292,31 @@ Soit \(G=(V,E)\) un graphe pondéré non-orienté connexe. Un \textit{arbre couv
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Algorithme de Kruskal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Algorithme de Kruskal}
+L'algorithme de Kruskal est un algorithme glouton permettant de déterminer un arbre couvrant minimal d'un graphe avec une complexité temporelle en \(\Theta\left(|E|\log(|E|)\right)\).
+\begin{lstlisting}
+Initialiser un union-find sur l'ensemble des noeuds du graphe
+Créer un arbre vide
+Pour chaque arête par pondération croissante :
+    Si l'arête permet de relier deux noeuds non-connectés :
+        Ajouter l'arête à l'arbre
+        Fusionner les noeuds dans l'union-find
+        Si l'arbre est couvrant :
+            Renvoyer cet arbre
+\end{lstlisting}
+
+\begin{proof}
+  L'algorithme renvoie bien un arbre couvrant de \(G\). Pour montrer qu'il est de poids minimal, on considère l'invariant suivant, vérifié au début de chaque itération de la boucle principale : il existe \(\widetilde{A}\) un arbre couvrant minimal de \(G\) contenant toutes les arêtes de l'arbre \(A\) construit par l'algorithme. Au début de l'exécution, \(A\) ne contient aucune arête, donc l'invariant est vérifié. Lorsqu'une arête \(a\) est ajoutée à \(A\) :
+  \begin{itemize}
+    \item Si \(a\) appartient déjà à \(\widetilde{A}\), l'invariant reste vérifié.
+    \item On suppose que l'arête \(a\) n'appartient pas à \(\widetilde{A}\), et on note \((u,v)\) les noeuds qu'elle relie. \(\widetilde{A}\) est un arbre, donc il existe un chemin \(C\) de \(u\) vers \(v\) dans \(\widetilde{A}\). L'arête \(a\) doit être ajoutée à \(A\), donc il n'existe pas de chemin de \(u\) vers \(v\) dans \(A\). Ainsi, il existe une arête \(a'\) de \(C\) n'appartenant pas à \(A\), on note \(u'\) et \(v'\) les noeuds qu'elle relie. On suppose cette arête de pondération strictement inférieure à celle de \(a\). L'ordre de parcours des arêtes assure qu'elle a été parcourue précédemment, sans avoir été ajoutée à \(A\). Il donc un chemin de \(u'\) vers \(v'\) dans \(A\). Or, les arêtes de \(A\) appartiennent à \(\widetilde{A}\), donc il existe un chemin de \(u'\) vers \(v'\) dans \(\widetilde{A}\) n'utilisant pas l'arête \(a'\), ce qui est absurde car \(a'\) appartient à l'arbre \(\widetilde{A}\). Ainsi, \(a'\) est de pondération supérieure ou égale à celle de \(a\). En remplaçant \(a'\) par \(a\) dans \(\widetilde{A}\), on obtient un arbre couvrant minimal de \(G\) auquel toutes les arêtes de \(A\) appartiennent : l'invariant est donc vérifié.
+  \end{itemize}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Flots %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Flots}
