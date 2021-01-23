@@ -11,7 +11,17 @@
 \usepackage{xcolor}
 
 \usepackage{geometry} % Mise en page
-\geometry{a4paper, margin=2.5cm}
+\geometry{a4paper, margin=2.5cm, headheight=15pt}
+
+\usepackage{fancyhdr} % En-têtes et pieds de page
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\leftmark}
+%\rhead{\rightmark}
+\lfoot{Adrien Vannson}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{0.5pt}
 
 \usepackage{minted} % Code
 \usemintedstyle{vs}
