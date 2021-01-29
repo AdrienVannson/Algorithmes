@@ -49,6 +49,8 @@
     {è}{{\`e}}1
     {ê}{{\^e}}1
     {à}{{\`a}}1
+    {É}{{\'E}}1
+    {À}{{\`A}}1
 }
 
 \usepackage{tikz} % Figures
@@ -79,15 +81,65 @@
 \tableofcontents
 \newpage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Structures de données %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Structures de données}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Union-Find %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \subsection{Union-Find}
+L'union-find est une structure de données permettant de maintenir à jour une partition d'un ensemble. Il supporte deux opérations principales :
+\begin{itemize}
+  \item La recherche de la composante d'un élément : à chaque élément, elle associe un représentant ne dépendant que de la composante dans laquelle il se trouve.
+  \item La fusion des composantes dans lesquelles se trouvent deux éléments.
+\end{itemize}
+Pour cela, il utilise une structure de forêt dans laquelle chaque noeud correspond à un élément et contient deux informations :
+\begin{itemize}
+  \item Le père du noeud s'il n'est pas une racine, lui-même sinon.
+  \item Un entier valant le nombre de noeuds du sous-arbre dont il est la racine si c'est une racine et \(0\) sinon.
+\end{itemize}
+Cette forêt est telle que deux éléments sont dans la même composante si et seulement si leurs noeuds correspondant appartiennent au même arbre. Le représentant associé à un noeud est alors la racine de l'arbre dans lequel celui-ci se trouve.
+
+\begin{lstlisting}
+Fonction initialiser () :
+    Pour chaque noeud :
+        noeud.père = noeud
+        noeud.taille = 1
+
+Fonction représentant (noeud) :
+    Si noeud.père != noeud:
+        noeud.père = représentant(noeud.père)
+    Renvoyer noeud.père
+
+Fonction unir (noeud1, noeud2) :
+    noeud1 = représentant(noeud1)
+    noeud2 = représentant(noeud2)
+
+    Si noeud1 != noeud2 :
+        Si noeud2.taille > noeud1.taille :
+            Échanger noeud1 et noeud2
+
+        noeud1.taille += noeud2.taille
+        noeud2.taille = 0
+        noeud2.père = noeud1
+\end{lstlisting}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Graphes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Graphes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Plus courts chemins %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Plus courts chemins %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Plus courts chemins}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Floyd-Warshall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Floyd-Warshall %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Floyd-Warshall}
 
@@ -110,7 +162,7 @@ La correction de l'algorithme est assurée par l'invariant de boucle suivant, v�
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Arbre du DFS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Arbre du DFS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Arbre du DFS}
 Il est possible de représenter un graphe orienté en mettant en avant les différentes propriétés de ses arcs pouvant être rencontrées lors d'un parcours en profondeur, ce qui peut par exemple aider à adapter l'algorithme du DFS à différents problèmes.
@@ -156,12 +208,12 @@ Les arcs peuvent être classés en quatre catégories :
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Composantes fortement connexes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Composantes fortement connexes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Composantes fortement connexes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Algorithme de Kosaraju  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Algorithme de Kosaraju  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Kosaraju}
 L'algorithme de Kosaraju permet de calculer les composantes fortement connexes d'un graphe orienté. Pour cela, il effectue successivement deux DFS. Le premier permet de trouver un parcours suffixe du graphe, c'est-à-dire un parcours suffixe de l'arbre des appels du DFS. Le deuxième est effectué sur le graphe transposé \(G^\top\) (graphe obtenu en inversant les arcs de \(G\)), en découvrant les noeuds dans l'ordre inverse du parcours suffixe. Il permet de déterminer les composantes fortement connexes du graphe.
@@ -190,7 +242,7 @@ Pour chaque noeud v dans l'ordre inverse du parcours suffixe :
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Algorithme de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Algorithme de Tarjan  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Tarjan}
 L'algorithme de Tarjan permet de calculer les composantes fortement connexes d'un graphe orienté \(G=(V,E)\). Il effectue un parcours en profondeur du graphe, on utilisera donc la représentation graphique décrite précédemment qui est adaptée à cette situation. \\
@@ -274,7 +326,7 @@ Montrons que la fonction parcourir a le comportement attendu. On suppose que, lo
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Arbre couvrant minimal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Arbre couvrant minimal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Arbre couvrant minimal}
 Soit \(G=(V,E)\) un graphe pondéré non-orienté connexe. Un \textit{arbre couvrant} de \(G\) est un arbre inclus dans \(G\) contenant tous les noeuds de \(G\). On définit le \textit{poids} d'un arbre couvrant comme étant la somme des pondérations de ses arêtes. Un \textit{arbre couvrant minimal} est alors un arbre couvrant de poids minimal.
@@ -301,7 +353,7 @@ Soit \(G=(V,E)\) un graphe pondéré non-orienté connexe. Un \textit{arbre couv
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Algorithme de Kruskal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Algorithme de Kruskal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Kruskal}
 L'algorithme de Kruskal est un algorithme glouton permettant de déterminer un arbre couvrant minimal d'un graphe avec une complexité temporelle en \(\Theta\left(|E|\log(|E|)\right)\).
@@ -326,7 +378,7 @@ Pour chaque arête par pondération croissante :
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Flots %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Flots %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \subsection{Flots}
     \subsubsection{Définitions}
@@ -353,7 +405,7 @@ Soit \(G=(V,E)\) un graphe orienté et \((s,p)\) deux sommets distincts de \(V\)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Capacités résiduelles %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Capacités résiduelles %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Capacités résiduelles}
 
@@ -365,7 +417,7 @@ Pour tout \((u,v) \in V^2\), on notera \(c_f(u,v) = c(u,v) - f(u,v)\) la capacit
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Algorithme d'Edmonds-Karp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme d'Edmonds-Karp}
 L'algorithme d'Edmonds-Karp permet de calculer le flot maximal pouvant traverser un réseau avec une complexité temporelle en \(O(|V| |E|^2)\). Sa complexité est également en \(O(S)\) où \(S\) est la somme des capacités des arcs du graphe. Pour cela, il commence par considérer un flot nul qu'il améliore ensuite tant que possible ; le flot finalement obtenu étant de valeur maximale.
@@ -391,7 +443,7 @@ La recherche d'un chemin augmentant est effectuée à l'aide d'un BFS dans le gr
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Théorème Flot-Max / Coupe-Min %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Théorème Flot-Max / Coupe-Min %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Théorème Flot-Max / Coupe-Min}
 
@@ -478,14 +530,14 @@ Soit \(G=(V,E)\) un graphe orienté pondéré, et \(s\) et \(p\) deux sommets de
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Couplages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Couplages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsection{Couplages}
 Soit \(G=(V,E)\) un graphe biparti dont on note \((X,Y)\) une partition des sommets adaptée, c'est-à-dire telle que toute arête relie un noeud de \(X\) avec un noeud de \(Y\). Un \textit{couplage} \(C\) de \(G\) est une partie de \(E\) telle que tout noeud ne soit relié qu'à au plus une arête de \(C\). Un couplage est dit \textit{maximum} si et seulement si il est de cardinal maximal. Pour la suite, les arêtes d'un graphe appartenant à un couplage seront représentées en rouge et celles n'y appartenant pas seront représentées en noir.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Chemins d'augmentation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Chemins d'augmentation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsubsection{Chemins d'augmentation}
 
@@ -552,7 +604,7 @@ Soit \(G=(V,E)\) un graphe biparti dont on note \((X,Y)\) une partition des somm
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% Recherche d'un couplage maximum %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%% Recherche d'un couplage maximum %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsubsection{Recherche d'un couplage maximum}
 Soit \(G=(V,E)\) un graphe biparti. Pour construire un couplage maximum de \(G\), on peut améliorer tant que possible un couplage initialement vide en trouvant et utilisant des chemins d'augmentation. L'algorithme décrit a une complexité en \(O(|V||E|)\).
