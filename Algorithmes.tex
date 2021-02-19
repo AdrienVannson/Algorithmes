@@ -353,6 +353,35 @@ Soit \(G=(V,E)\) un graphe pondéré non-orienté connexe. Un \textit{arbre couv
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% Algorithme de Prim %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \subsubsection{Algorithme de Prim}
+L'algorithme de Prim est un algorithme calculant un arbre couvrant minimal d'un graphe. Son fonctionnement est semblable à celui de l'algorithme de Dijkstra. Il met à jour un arbre \(A\) initialement vide en parcourant le graphe de la façon suivante : tant que des noeuds n'ont pas été visités, c'est-à-dire tant que \(A\) n'est pas couvrant, une arête à ajouter à \(A\) est sélectionnée de manière gloutonne : c'est celle reliant un sommet visité à un sommet non-visité dont la pondération est minimale. Une fois que tous les sommets du graphe ont été visités, l'arbre obtenu est un arbre couvrant minimal.
+
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/prim.hpp}{Implémentation}
+\begin{lstlisting}
+A := arbre vide
+Noter un sommet quelconque du graphe comme visité
+Tant qu'il existe des sommets non-visités :
+    a := arête reliant un sommet visité et un sommet non-visité de
+         pondération minimale
+    Ajouter a à A
+    Marquer le sommet à l'extrémité de a comme visité
+\end{lstlisting}
+
+Pour rechercher l'arête à ajouter à \(A\), il est possible d'utiliser une file à priorité contenant l'ensemble des arêtes pouvant être utilisées. La complexité obtenue est alors en \(O(|E|\log|E|)\). Il est également possible de maintenir, pour chaque noeud non-visité, l'arête de pondération minimale le reliant à un noeud visité, si elle existe. Dans ce cas, la complexité est en \(O(|V|^2)\).
+
+\begin{proof}
+  L'algorithme renvoie bien un arbre couvrant du graphe \(G\). Pour montrer qu'il est minimal, il suffit de montrer qu'à chaque étape de l'algorithme, il existe un arbre couvrant de \(G\) dans lequel \(A\) est inclus.
+  \begin{itemize}
+    \item Initialement, \(A\) est vide, donc la propriété est vérifiée.
+    \item On suppose la propriété vérifiée avant qu'une arête \(a\) ne soit ajoutée à \(A\). On note \(\widetilde{A}\) un arbre couvrant minimal dans lequel \(A\) est inclus. Si \(a\) appartient à \(\widetilde{A}\), la propriété reste vérifiée. On suppose donc que \(a\) n'appartient pas à \(\widetilde{A}\). \(a\) relie un sommet visité \(u\) à un sommet non-visité \(v\). Par définition d'un arbre, il existe un chemin \(c\) de \(u\) vers \(v\) dans \(\widetilde{A}\). Or, \(u\) est visité et \(v\) ne l'est pas, donc il existe une arête \(\widetilde{a}\) dans \(c\) reliant un sommet visité à un sommet non-visité. Si sa pondération était strictement inférieure à celle de \(a\), elle aurait été sélectionnée par l'algorithme, ce qui n'est pas le cas. Ainsi, l'arbre couvrant obtenu à partir de \(\widetilde{A}\) en enlevant \(\widetilde{a}\) puis en rajoutant \(a\) reste minimal. La propriété reste donc vérifiée.
+  \end{itemize}
+  Une fois tous les sommets visités, tout arbre couvrant contenant \(A\) est égal à \(A\), ce qui assure que \(A\) est minimal.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Algorithme de Kruskal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Kruskal}
