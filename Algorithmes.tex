@@ -142,7 +142,7 @@ Fonction unir (noeud1, noeud2) :
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Floyd-Warshall}
 
-L'algorithme de Floyd-Warshall permet de calculer la longueur du plus court chemin entre chaque paire de noeuds d'un graphe \(G\) orienté et pondéré avec une complexité en \(\Theta(N^3)\). Les pondérations peuvent éventuellement être négatives, mais il ne doit pas exister de cycle négatif dans \(G\).
+L'algorithme de Floyd-Warshall permet de calculer la longueur du plus court chemin entre chaque paire de noeuds d'un graphe \(G\) orienté et pondéré avec une complexité en \(\Theta(|V|^3)\). Les pondérations peuvent éventuellement être négatives, mais il ne doit pas exister de cycle négatif dans \(G\).
 
 \noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/graphs/algorithms/floyd-warshall.hpp}{Implémentation}
 \begin{lstlisting}
