@@ -670,6 +670,7 @@ Tant qu'il existe un chemin d'augmentation :
 
 Soit \(S = s_0...s_{n-1}\) une chaîne de caractères. L'algorithme de Knuth-Morris-Pratt (KMP) permet de calculer, pour tout \(k\), la longueur \(l_k\) du plus long suffixe strict de \(s_0...s_{k-1}\) étant également un préfixe de \(S\). Il peut être utilisé pour rechercher en temps linéaire une chaîne de caractères dans un texte.
 
+\noindent\href{https://github.com/AdrienVannson/algo-lib/blob/master/include/strings/kmp.hpp}{Implémentation}
 \begin{lstlisting}
 Fonction kmp(s):
   l := tableau de taille |s|+1
