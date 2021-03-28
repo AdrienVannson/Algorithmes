@@ -247,10 +247,10 @@ Pour chaque noeud v dans l'ordre inverse du parcours suffixe :
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \subsubsection{Algorithme de Tarjan}
 L'algorithme de Tarjan permet de calculer les composantes fortement connexes d'un graphe orienté \(G=(V,E)\). Il effectue un parcours en profondeur du graphe, on utilisera donc la représentation graphique décrite précédemment qui est adaptée à cette situation. \\
-On définit tout d'abord la racine d'une composante fortement connexe comme étant le premier noeud de la composante rencontré lors du parcours du graphe. Elles sont représentés en jaune sur le schéma. On remarque qu'une composante fortement connexe est un sous-arbre de l'arbre des appels du DFS enraciné sur la racine de la composante, privé des éventuels sous-arbres correspondant à d'autres composantes. Pour trouver les composantes fortement connexes, il suffit donc de trouver l'ensemble de leurs racines. \\
+On définit tout d'abord la racine d'une composante fortement connexe comme étant le premier noeud de la composante rencontré lors du parcours du graphe. Elles sont représentées en jaune sur le schéma. On remarque qu'une composante fortement connexe est un sous-arbre de l'arbre des appels du DFS enraciné sur la racine de la composante, privé des éventuels sous-arbres correspondant à d'autres composantes. Pour trouver les composantes fortement connexes, il suffit donc de trouver l'ensemble de leurs racines. \\
 On effectue un DFS sur le graphe, en maintenant à jour :
 \begin{itemize}
-  \item Des identifiants pour chacun des noeuds : ils sont données par ordre croissant au fur et à mesure du parcours
+  \item Des identifiants pour chacun des noeuds : ils sont donnés par ordre croissant au fur et à mesure du parcours
   \item Une pile contenant les noeuds dont la composante n'a pas encore été parcourue complètement, ajoutés dans leur ordre de parcours
   \item L'état de chaque noeud, parmi les états suivants :
     \begin{itemize}
@@ -259,9 +259,10 @@ On effectue un DFS sur le graphe, en maintenant à jour :
       \item Visité : le parcours du noeud est terminé, et sa composante fortement connexe est complètement connue
     \end{itemize}
 \end{itemize}
+
 La fonction \lstinline|parcourir| renvoie le plus petit identifiant d'un noeud présent dans la pile et accessible directement depuis le sous-arbre enraciné sur le noeud d'appel, ou éventuellement \(+\infty\) si aucun noeud ne convient.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \label{algorithme-tarjan}
   \centering
   \caption{Exemple}
@@ -594,7 +595,7 @@ Soit \(G=(V,E)\) un graphe biparti dont on note \((X,Y)\) une partition des somm
     \item On suppose qu'il existe un chemin d'augmentation \(v = (v_0, ..., v_{p-1})\). La différence symétrique de \(C\) et de \(\{ \{v_i,v_{i+1}\}, i \in [\![0,p-2]\!] \}\) est alors un couplage de cardinal \(|C|+1\). Ainsi, s'il existe un chemin d'augmentation, le couplage n'est pas maximum.
 
     \item
-      On suppose réciproquement qu'il n'existe pas de chemin d'augmentation. Il existe \(C_0\) un couplage maximum de \(G\). On note \(D\) la différence symétrique de \(C\) et de \(C_0\). \(C\) et \(C_0\) sont des couplages, donc chaque sommet de \(G\) est adjacent à au plus deux arêtes de \(D\). Ainsi, les arêtes de \(D\) forment des \textit{cycles} ou des \textit{chaînes} d'arêtes, par exemple :
+      On suppose réciproquement qu'il n'existe pas de chemin d'augmentation. Il existe \(C_0\) un couplage maximum de \(G\). On note \(D\) la différence symétrique de \(C\) et de \(C_0\). \(C\) et \(C_0\) sont des couplages, donc chaque sommet de \(G\) est relié à au plus deux arêtes de \(D\). Ainsi, les arêtes de \(D\) forment des \textit{cycles} ou des \textit{chaînes} d'arêtes, par exemple :
 
       \begin{figure}[ht]
         \centering
@@ -639,7 +640,7 @@ Soit \(G=(V,E)\) un graphe biparti dont on note \((X,Y)\) une partition des somm
 %%%%%%% Recherche d'un couplage maximum %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       \subsubsection{Recherche d'un couplage maximum}
-Soit \(G=(V,E)\) un graphe biparti. Pour construire un couplage maximum de \(G\), on peut améliorer tant que possible un couplage initialement vide en trouvant et utilisant des chemins d'augmentation. L'algorithme décrit a une complexité en \(O(|V||E|)\).
+Soit \(G=(V,E)\) un graphe biparti. Pour construire un couplage maximum de \(G\), on peut améliorer tant que possible un couplage initialement vide en trouvant et utilisant des chemins d'augmentation. L'algorithme décrit a une complexité en \(O(|V||E| + |V|^2)\).
 
 \begin{lstlisting}
 Créer un couplage vide C
