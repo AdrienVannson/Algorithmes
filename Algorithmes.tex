@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amsthm}
 \usepackage[french]{babel}
+\usepackage{colortbl}
 \usepackage{comment}
 \usepackage[T1]{fontenc}
 \usepackage{enumitem}
@@ -654,6 +655,68 @@ Tant qu'il existe un chemin d'augmentation :
   \end{itemize}
 \end{proof}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Chaînes de caractères %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Chaînes de caractères}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% KMP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \subsection{Algorithme de Knuth-Morris-Pratt}
+
+Soit \(S = s_0...s_{n-1}\) une chaîne de caractères. L'algorithme de Knuth-Morris-Pratt (KMP) permet de calculer, pour tout \(k\), la longueur \(l_k\) du plus long suffixe strict de \(s_0...s_{k-1}\) étant également un préfixe de \(S\). Il peut être utilisé pour rechercher en temps linéaire une chaîne de caractères dans un texte.
+
+\begin{lstlisting}
+Fonction kmp(s):
+  l := tableau de taille |s|+1
+  l[0] := -1
+  Pour k de 1 à |s| inclus :
+    t := l[k - 1]
+    Tant que t != -1 et s[t] != s[k - 1]:
+      t := l[t]
+    l[k] := t + 1
+  Renvoyer l
+\end{lstlisting}
+
+\begin{proof}\leavevmode
+\begin{itemize}
+  \item Une chaîne vide n'admet aucun suffixe strict : on choisit \(l_0 = -1\) par convention. Le choix de cette valeur permet d'éviter de distinguer certains cas particuliers dans la suite de l'algorithme.
+  \item Soit \(k \in [\![1, n]\!]\). \(t+1\) est la taille d'un suffixe strict de \(s_0...s_{k-1}\) préfixe de \(S\) si et seulement si \(s_{k-t-1}...s_{k-2}\) est préfixe de \(S\) et \(s_{k-1}=s_t\). Ainsi, pour calculer le plus long suffixe strict de \(s_0...s_{k-1}\) étant un préfixe de \(S\), il suffit d'énumérer les suffixes de \(s_0...s_{k-2}\) préfixes de \(S\) par taille décroissante, et de renvoyer le premier dont la longueur \(t\) vérifie \(s_{k-1}=s_t\). \\
+  Montrons que les sous-chaînes énumérées par l'algorithme sont bien les suffixes de \(s_0...s_{k-2}\) préfixes de \(S\). On note \(B\) le plus long suffixe strict d'une chaîne \(A\) dont il est également un préfixe. Alors, \(A\) est de la forme \(B ... B\), où les deux \(B\) peuvent éventuellement se chevaucher. Les préfixes-suffixes stricts de \(A\) sont \(B\) et les préfixes-suffixes stricts de \(B\).
+\end{itemize}
+\end{proof}
+
+Pour utiliser cet algorithme pour rechercher les occurrences d'une chaîne de caractères \(S\) dans un texte \(T\), il suffit de considérer la chaîne de caractères \(S \# T\), où \(\#\) est un caractère n'apparaissant ni sans \(S\), ni dans \(T\). Les occurrences de \(S\) dans \(T\) se terminent aux positions \(k - 2|S|\) où \(k\) vérifie \(l_k = |S|\).
+
+Par exemple, pour recherche la chaîne \(S=ababc\) dans le texte \(T=abababcd\), l'algorithme construit le tableau suivant :
+\begin{center}
+  \begin{tabular}{|l |c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    Chaîne &&
+    \cellcolor{red!30}a &
+    \cellcolor{green!30}b &
+    \cellcolor{red!30}a &
+    \cellcolor{green!30}b &
+    \cellcolor{blue!30}c &
+    \# &
+    \cellcolor{red!30}a &
+    \cellcolor{green!30}b &
+    \cellcolor{red!30}a &
+    \cellcolor{green!30}b &
+    \cellcolor{red!30}a &
+    \cellcolor{green!30}b &
+    \cellcolor{blue!30}c &
+    \cellcolor{yellow!40}d \\
+
+    \hline
+    \(l_k\) &
+    -1 & 0 & 0 & 1 & 2 & 0 & 0 & 1 & 2 & 3 & 4 & 3 & 4 & 5 & 0 \\
+    \hline
+  \end{tabular}
+\end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Géométrie %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
